@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+var chance int = 1
+
 //create random number
 func numberGenerator() int {
 	rand.Seed(time.Now().Unix())
@@ -20,40 +22,48 @@ func readInput() int {
 	if err != nil {
 		fmt.Println("Deu xabu, tenta de novo!")
 	} else {
-		fmt.Printf("Sua aposta foi no número: %v\n", input)
+		fmt.Printf("Sua aposta foi no número: %v\n\n", input)
 	}
 	return input
 }
 
 func isMatching(g, s int) bool {
 	if g < s {
-		fmt.Println("Sua aposta é MENOR que o número sorteado!")
+		fmt.Printf("Você apostou em um número MENOR que o número sorteado!\nTente de novo!\n\n")
 		return false
 
 	} else if g > s {
-		fmt.Println("Sua aposta é MAIOR que o número sorteado!")
+		fmt.Printf("Você apostou em um número MAIOR que o número sorteado\nTente de novo!\n\n")
 		return false
 	} else {
-		fmt.Println("Parabéns! Você acertou o número sorteado!")
+		fmt.Printf("Parabéns! Você acertou o número sorteado!\n\n")
 		return true
 	}
 }
+
 func main() {
 
 	//cabeçalho
 	fmt.Printf("\nBEM VINDO A LOTERIA DOS GURI\n\n")
-	fmt.Printf("Um número aleatório de 0-10 foi gerado e você tem que adivinhar qual é!\n\n")
+	fmt.Printf("Um número aleatório de 0-10 foi gerado e você tem que adivinhar qual é!\nVocê tem TRÊS tentativas!\n\n")
 
 	//generate random number
 	secret := numberGenerator()
 
-	// get user input
 	guessed := readInput()
 	acertou := isMatching(guessed, secret)
+	var chance int = 1
 	//make comparison
-	for acertou != true {
+
+	for acertou != true && chance < 3 {
 		guessed = readInput()
 		acertou = isMatching(guessed, secret)
+		chance++
+	}
+
+	if chance == 3 && acertou != true {
+		fmt.Printf("Suas chances acabaram!!! Mais sorte na próxima!\n\n")
+
 	}
 
 }
