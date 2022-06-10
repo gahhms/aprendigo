@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"sort"
 	"time"
 )
 
@@ -83,6 +82,21 @@ func showToDo(t []ToDoList) {
 	statusOnlyToDo(t)
 }
 
+func escolhaFuncao(i int) {
+	fmt.Printf("Escolheu: %v", i)
+}
+
+func lerEscolha() {
+	fmt.Printf("Escolha a função que gostaria de fazer: ")
+	_, err := fmt.Scanln(&funcao)
+	if err != nil {
+		fmt.Println("Deu xabu, tenta de novo!")
+	}
+	escolhaFuncao(funcao)
+}
+
+var funcao int
+
 func main() {
 
 	Tarefas := []ToDoList{
@@ -91,17 +105,21 @@ func main() {
 		{"Levar o cachorro para cagar", time.Date(2022, time.June, 01, 23, 0, 0, 0, time.UTC), "02/06/2022", false},
 	}
 
+	lerEscolha()
+
 	today := time.Now().Format("02/01/2006")
 
 	fmt.Printf("Bem vindo a SUPER LISTA DE TAREFAS!\n\n")
 	fmt.Println("Bom dia, hoje é", today)
 	fmt.Println("")
 
-	show(Tarefas)
+	fmt.Println(Tarefas)
 
-	sort.Sort(sortByDate(Tarefas))
-	showAll(Tarefas)
+	//show(Tarefas)
 
-	showToDo(Tarefas)
+	//sort.Sort(sortByDate(Tarefas))
+	//showAll(Tarefas)
+
+	//showToDo(Tarefas)
 
 }
