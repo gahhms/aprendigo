@@ -2,8 +2,11 @@ package main
 
 import (
 	"fmt"
+	"sort"
 	"time"
 )
+
+var funcao int
 
 type ToDoList struct {
 	ToDo  string
@@ -60,6 +63,7 @@ func statusOnlyToDo(t []ToDoList) {
 }
 
 func show(t []ToDoList) {
+	fmt.Println("")
 	fmt.Printf("Suas tarefas são:\n")
 	fmt.Println("Nº\tData Final:\tAdicionada em:\tStatus:\t\tTarefa:")
 	fmt.Println("")
@@ -83,11 +87,33 @@ func showToDo(t []ToDoList) {
 }
 
 func escolhaFuncao(i int) {
-	fmt.Printf("Escolheu: %v", i)
+	switch i {
+	case 1:
+		fmt.Println("one")
+	case 2:
+		show(Tarefas)
+		voltarMenu()
+	case 3:
+		sort.Sort(sortByDate(Tarefas))
+		showAll(Tarefas)
+		voltarMenu()
+	case 4:
+		sort.Sort(sortByDate(Tarefas))
+		showToDo(Tarefas)
+		voltarMenu()
+	case 5:
+		fmt.Println("Fim do Programa!")
+	default:
+		fmt.Printf("\nOpção Inválida! Digitou errado?\n\n")
+		lerEscolha()
+	}
 }
 
 func lerEscolha() {
-	fmt.Printf("Escolha a função que gostaria de fazer: ")
+
+	fmt.Printf("Escolha a função que gostaria de executar!")
+	fmt.Printf("\n1 - Adicionar nova tarefa\n2 - Listar todas as tarefas\n3 - Listar tarefas por data\n4 - Listar tarefas pendentes\n5 - Encerrar programa\n")
+	fmt.Printf("Sua escolha: ")
 	_, err := fmt.Scanln(&funcao)
 	if err != nil {
 		fmt.Println("Deu xabu, tenta de novo!")
@@ -95,17 +121,34 @@ func lerEscolha() {
 	escolhaFuncao(funcao)
 }
 
-var funcao int
+func voltarMenu() {
+
+	var voltamenu string
+	fmt.Println("")
+	fmt.Printf("Deseja voltar ao Menu principal? (s/n): ")
+	_, err := fmt.Scanln(&voltamenu)
+	if err != nil {
+		fmt.Println("Deu xabu, tenta de novo!")
+	}
+	switch voltamenu {
+	case "s":
+		fmt.Println("volta menu")
+		lerEscolha()
+	case "n":
+		fmt.Println("Fim do Programa")
+	default:
+		fmt.Printf("\nOpção Inválida! Digitou errado?\n")
+		voltarMenu()
+	}
+}
+
+var Tarefas = []ToDoList{
+	{"Lavar roupas brancas", time.Date(2023, time.June, 15, 23, 0, 0, 0, time.UTC), "03/06/2022", false},
+	{"Escrever o código dessa lista ", time.Date(2009, time.January, 07, 23, 0, 0, 0, time.UTC), "02/06/2022", false},
+	{"Levar o cachorro para cagar", time.Date(2022, time.June, 01, 23, 0, 0, 0, time.UTC), "02/06/2022", false},
+}
 
 func main() {
-
-	Tarefas := []ToDoList{
-		{"Lavar roupas brancas", time.Date(2023, time.June, 10, 23, 0, 0, 0, time.UTC), "03/06/2022", true},
-		{"Escrever o código dessa lista ", time.Date(2009, time.January, 07, 23, 0, 0, 0, time.UTC), "02/06/2022", false},
-		{"Levar o cachorro para cagar", time.Date(2022, time.June, 01, 23, 0, 0, 0, time.UTC), "02/06/2022", false},
-	}
-
-	lerEscolha()
 
 	today := time.Now().Format("02/01/2006")
 
@@ -113,13 +156,6 @@ func main() {
 	fmt.Println("Bom dia, hoje é", today)
 	fmt.Println("")
 
-	fmt.Println(Tarefas)
-
-	//show(Tarefas)
-
-	//sort.Sort(sortByDate(Tarefas))
-	//showAll(Tarefas)
-
-	//showToDo(Tarefas)
+	lerEscolha()
 
 }
