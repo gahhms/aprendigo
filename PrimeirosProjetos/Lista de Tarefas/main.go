@@ -77,7 +77,7 @@ func show(t []ToDoList) {
 	statusToDo(t)
 }
 
-func showAll(t []ToDoList) {
+func showPorData(t []ToDoList) {
 	fmt.Println("")
 	fmt.Printf("Suas tarefas ordenadas por data são:\n")
 	fmt.Println("Nº\tData Final:\tAdicionada em:\tStatus:\t\tTarefa:")
@@ -99,22 +99,47 @@ func escolhaFuncao(i int) {
 		addTarefa()
 		voltarMenu()
 	case 2:
-		show(Tarefas)
+		sort.Sort(sortByDate(Tarefas))
+		alteraStatus(Tarefas)
 		voltarMenu()
 	case 3:
-		sort.Sort(sortByDate(Tarefas))
-		showAll(Tarefas)
+		show(Tarefas)
 		voltarMenu()
 	case 4:
 		sort.Sort(sortByDate(Tarefas))
-		showToDo(Tarefas)
+		showPorData(Tarefas)
 		voltarMenu()
 	case 5:
+		sort.Sort(sortByDate(Tarefas))
+		showToDo(Tarefas)
+		voltarMenu()
+	case 6:
 		fmt.Println("Fim do Programa!")
 	default:
 		fmt.Printf("Opção Inválida! Digitou errado?\n\n")
 		lerEscolha()
 	}
+}
+
+func alteraStatus(t []ToDoList) {
+	showPorData(Tarefas)
+	fmt.Println("")
+	fmt.Printf("Qua das tarefas gostaria de alterar o Status? (digite o número da tarefa): ")
+	var tarefaAlterar int
+	_, err := fmt.Scan(&tarefaAlterar)
+	if err != nil {
+		fmt.Println("Deu xabu, tenta de novo!")
+	}
+	tarefaAlterar--
+	if Tarefas[tarefaAlterar].Done == false {
+		Tarefas[tarefaAlterar].Done = true
+	} else {
+		Tarefas[tarefaAlterar].Done = false
+
+	}
+	showPorData(Tarefas)
+	fmt.Println("")
+	fmt.Println("Status da tarefa alterado!")
 }
 
 func addTarefa() {
@@ -142,7 +167,7 @@ func addTarefa() {
 func lerEscolha() {
 
 	fmt.Printf("Escolha a função que gostaria de executar!")
-	fmt.Printf("\n1 - Adicionar nova tarefa\n2 - Listar todas as tarefas\n3 - Listar tarefas por data\n4 - Listar tarefas pendentes\n5 - Encerrar programa\n")
+	fmt.Printf("\n1 - Adicionar nova tarefa\n2 - Alterar status de uma tarefa\n3 - Listar todas as tarefas\n4 - Listar tarefas por data\n5 - Listar tarefas pendentes\n6 - Encerrar programa\n")
 	fmt.Printf("Sua escolha: ")
 	_, err := fmt.Scan(&funcao)
 	if err != nil {
@@ -174,12 +199,6 @@ func voltarMenu() {
 	}
 }
 
-var Tarefas = []ToDoList{
-	{"Lavar roupas brancas", time.Date(2023, time.June, 15, 23, 0, 0, 0, time.UTC), time.Date(2023, time.June, 15, 23, 0, 0, 0, time.UTC), false},
-	{"Escrever o código dessa lista ", time.Date(2009, time.January, 07, 23, 0, 0, 0, time.UTC), time.Date(2023, time.June, 15, 23, 0, 0, 0, time.UTC), false},
-	{"Levar o cachorro para cagar", time.Date(2022, time.June, 01, 23, 0, 0, 0, time.UTC), time.Date(2023, time.June, 15, 23, 0, 0, 0, time.UTC), false},
-}
-
 func lerDescricao() string {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
@@ -189,7 +208,12 @@ func lerDescricao() string {
 	scanner1.Scan()
 	descricao1 := scanner1.Text()
 	return descricao1
+}
 
+var Tarefas = []ToDoList{
+	{"Lavar roupas brancas", time.Date(2023, time.June, 15, 23, 0, 0, 0, time.UTC), time.Date(2023, time.June, 15, 23, 0, 0, 0, time.UTC), false},
+	{"Escrever o código dessa lista ", time.Date(2009, time.January, 07, 23, 0, 0, 0, time.UTC), time.Date(2023, time.June, 15, 23, 0, 0, 0, time.UTC), false},
+	{"Levar o cachorro para cagar", time.Date(2022, time.June, 01, 23, 0, 0, 0, time.UTC), time.Date(2023, time.June, 15, 23, 0, 0, 0, time.UTC), false},
 }
 
 func main() {
